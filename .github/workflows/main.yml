@@ -1,0 +1,54 @@
+name: Improved Order Workflow
+
+on: push
+
+jobs:
+  # Job 1: Hygiene Check (Linting)
+  hygiene_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run lint
+
+  # Job 2: Taste Test (Unit Testing)
+  taste_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm test
+
+  # Job 3: Build/Cook (Only runs if Hygiene and Taste pass)
+  build_cook:
+    needs: [hygiene_check, taste_test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run build
+
+  # Job 4: Deploy/Serve (Only runs if Build finishes)
+  deploy_serve:
+    needs: build_cook
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm run deploy
+
+
+
+Gemini can make mistakes, so double-check it
+
