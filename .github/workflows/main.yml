@@ -49,6 +49,3 @@ jobs:
       - run: npm run deploy
 
 
-
-Gemini can make mistakes, so double-check it
-
